@@ -1,20 +1,11 @@
-'use strict';
-const express = require('express');
-const multer = require('multer');
-const port = process.env.PORT || 8080;
-let storage = multer.diskStorage({});
-let upload = multer({storage});
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express = require("express");
+const middleware_1 = require("./middleware/middleware");
+const routes = require("./routes/routes");
+const PORT = process.env.PORT || 8080;
 const app = express();
-
-app.use(express.static(__dirname + '/public'));
-
-app.post('/', upload.single('filemetadata'), (req,res) => {
-  let fileProp = {
-    size: req.file.size
-  };
-  
-  res.send(fileProp);
-});
-
-app.listen(port);
+app.use(express.static(__dirname + "/public"));
+app.use(routes);
+app.use(middleware_1.errorHandler);
+app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
